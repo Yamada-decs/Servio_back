@@ -1,4 +1,4 @@
-package models;
+package com.servio.app.model;
 
 public enum ProductState {
 	ACTIVO,

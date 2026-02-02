@@ -1,4 +1,4 @@
-package repositories;
+package com.servio.app.repository;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import models.Product;
-import models.ProductState;
+import com.servio.app.model.Product;
+import com.servio.app.model.ProductState;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
 	
-	List<Product> findByProductState(ProductState productState);
+	List<Product> findByProductState(String state);
 
     default Page<Product> searchByFields(String searchParams, List<String> searchFields, Pageable pageable) {
     	Specification<Product> spec = (root, query, cb) -> cb.disjunction();
