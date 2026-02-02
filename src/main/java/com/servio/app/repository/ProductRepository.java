@@ -16,9 +16,12 @@ import com.servio.app.model.ProductState;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
 	
-	List<Product> findByProductState(String state);
+	List<Product> findByProductState(ProductState productState);
 
     default Page<Product> searchByFields(String searchParams, List<String> searchFields, Pageable pageable) {
+    	if (searchParams == null || searchParams.isBlank() || searchFields.isEmpty()) {
+    	    return findAll(pageable);
+    	}
     	Specification<Product> spec = (root, query, cb) -> cb.disjunction();
         
         for (String field : searchFields) {

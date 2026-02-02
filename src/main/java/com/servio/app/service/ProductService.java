@@ -33,7 +33,7 @@ public class ProductService {
 	
 	public List<ProductDTO> getAllProductsList(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<Product> activeProducts = productRepository.findByProductState("ACTIVE");
+        List<Product> activeProducts = productRepository.findByProductState(ProductState.ACTIVO);
         System.out.println("Active Products: " + activeProducts.size());
         return activeProducts.stream()
                 .map(this::mapToDTO)
@@ -41,7 +41,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> getAllProducts() {
-        List<Product> activeProducts = productRepository.findByProductState("ACTIVE");
+        List<Product> activeProducts = productRepository.findByProductState(ProductState.ACTIVO);
         return activeProducts.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
