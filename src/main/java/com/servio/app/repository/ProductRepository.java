@@ -51,14 +51,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
         
     }
 
-    @Query("""
-    	    SELECT COUNT(p)
-    	    FROM Product p
-    	    WHERE
-    	        LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%'))
-    	        OR LOWER(p.code) LIKE LOWER(CONCAT('%', :search, '%'))
-    	        OR CAST(p.productState AS string) LIKE LOWER(CONCAT('%', :search, '%'))
-    	""")
-    long countBySearch(String search);
+//    @Query("""
+//    	    SELECT COUNT(p)
+//    	    FROM Product p
+//    	    WHERE
+//    	        LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%'))
+//    	        OR LOWER(p.code) LIKE LOWER(CONCAT('%', :search, '%'))
+//    	        OR CAST(p.productState AS string) LIKE LOWER(CONCAT('%', :search, '%'))
+//    	""")
+//    long countBySearch(String search);
     
 }
