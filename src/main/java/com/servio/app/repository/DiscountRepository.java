@@ -22,10 +22,10 @@ public interface DiscountRepository extends JpaRepository<Discount, Long>, JpaSp
 		Specification<Discount> spec = (root, query, cb) -> cb.disjunction();
 		
 		for (String field : searchFields) {
-			switch (field.toLowerCase()) {)
+			switch (field.toLowerCase()) {
 				case "reason":
 					spec = spec.or((root, query, criteriaBuilder) ->
-							criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + searchParams.toLowerCase() + "%"));
+							criteriaBuilder.like(criteriaBuilder.lower(root.get("reason")), "%" + searchParams.toLowerCase() + "%"));
 					break;
 				case "type":
 					try {
@@ -40,9 +40,11 @@ public interface DiscountRepository extends JpaRepository<Discount, Long>, JpaSp
 //							criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + searchParams.toLowerCase() + "%"));
 //					break;
 				default:
-					throw new IllegalArgumentException("Unexpected value: " + field.toLowerCase());
+					break;
 			}
 		}
+		
+		return findAll(spec, pageable); 
 		
 	}
 	

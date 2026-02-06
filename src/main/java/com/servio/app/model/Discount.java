@@ -3,7 +3,17 @@ package com.servio.app.model;
 import java.math.BigDecimal;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Entity
+@Table(name = "discount")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Discount {
 	
 	@Id

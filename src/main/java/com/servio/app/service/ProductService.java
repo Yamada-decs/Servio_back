@@ -24,21 +24,22 @@ public class ProductService {
 	public Page<ProductDTO> searchProducts(String searchParams, List<String> fields, PageRequest pageRequest){
 		Page<Product> productPage = productRepository.searchByFields(searchParams, fields, pageRequest);
 		
-		List<ProductDTO> productDTOs = productPage.getContent().stream()
-				.map(this::mapToDTO)
-				.collect(Collectors.toList());
+//		List<ProductDTO> productDTOs = productPage.getContent().stream()
+//				.map(this::mapToDTO)
+//				.collect(Collectors.toList());
 		
 		return productPage.map(product -> mapToDTO(product));
 	}
 	
-	public List<ProductDTO> getAllProductsList(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        List<Product> activeProducts = productRepository.findByProductState(ProductState.ACTIVO);
-        System.out.println("Active Products: " + activeProducts.size());
-        return activeProducts.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
+//  FUTURO PARA PAGINAR
+//	public List<ProductDTO> getAllProductsList(int page, int pageSize) {
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        List<Product> activeProducts = productRepository.findByProductState(ProductState.ACTIVO);
+//        System.out.println("Active Products: " + activeProducts.size());
+//        return activeProducts.stream()
+//                .map(this::mapToDTO)
+//                .collect(Collectors.toList());
+//    }
 
     public List<ProductDTO> getAllProducts() {
         List<Product> activeProducts = productRepository.findByProductState(ProductState.ACTIVO);
