@@ -14,7 +14,18 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 public class Customer {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
+	
+	@Column(name = "name")
 	private String name;
 	
+	@Column(name = "comment")
+	private String comment;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "state", nullable = false)
+	private CustomerState state;
 }
