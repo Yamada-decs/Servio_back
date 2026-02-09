@@ -17,9 +17,6 @@ import lombok.Setter;
 public class SaleRequestDTO {
 	private Long id;
 	private Long customerID;
-	private BigDecimal total;
-	private BigDecimal finalPrice;
-	private BigDecimal remaining;
 	private String comment;
 	private LocalDateTime date;
 	private String state;
