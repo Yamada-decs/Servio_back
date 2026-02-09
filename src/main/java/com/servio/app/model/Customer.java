@@ -27,5 +27,5 @@ public class Customer {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "state", nullable = false)
-	private CustomerState state;
+	private CustomerState customerState;
 }
