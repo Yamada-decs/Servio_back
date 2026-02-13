@@ -22,11 +22,11 @@ public class SaleDetail {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Column(name = "sale_id")
+	@JoinColumn(name = "sale_id", nullable = false)
 	private Sale sale;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Column(name = "product_id")
+	@JoinColumn(name = "product_id")
 	private Product product;
 	
 	@Column(name = "quantity")

@@ -23,7 +23,7 @@ public class Payment {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Column(name = "sale_id")
+	@JoinColumn(name = "sale_id")
 	private Sale sale;
 	
 	@Column(name = "payment_method")

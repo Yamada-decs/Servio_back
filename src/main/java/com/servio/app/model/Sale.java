@@ -25,7 +25,7 @@ public class Sale {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Column(name = "customer_id")
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
 	@Column(name = "total", nullable = false)

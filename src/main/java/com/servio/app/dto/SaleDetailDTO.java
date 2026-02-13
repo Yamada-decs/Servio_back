@@ -1,7 +1,6 @@
 package com.servio.app.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SaleRequestDTO {
-	private Long customerID;
-	private String comment;
-	private LocalDateTime date;
+public class SaleDetailDTO {
+	private Long id;
+	private Long saleId;
+	private Long productId;
+	private BigDecimal quantity;
+	private BigDecimal subTotal;
 }

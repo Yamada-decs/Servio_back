@@ -138,12 +138,17 @@ public class SaleService {
 	private SaleResponseDTO mapToDTO(Sale sale){
         return SaleResponseDTO.builder()
                 .id(sale.getId())
-                .customerID(sale.getCustomer().getId())
-                .customerName(sale.getCustomer().getName())
-                .customerID(sale.getCustomer().getId())
+                .customerID(sale.getCustomer() != null 
+                        ? sale.getCustomer().getId() 
+                                : null)
+                .customerName(sale.getCustomer() != null 
+                        ? sale.getCustomer().getName() 
+                                : null)
                 .total(sale.getTotal())
                 .discountReason(sale.getDiscountReason())
-                .dicountType(sale.getDiscountType().name())
+                .dicountType(sale.getDiscountType() != null 
+                        ? sale.getDiscountType().name() 
+                                : null)
                 .discountAmount(sale.getDiscountAmount())
                 .finalPrice(sale.getFinalPrice())
                 .remaining(sale.getRemaining())
@@ -152,6 +157,15 @@ public class SaleService {
                 .state(sale.getSaleState().name())
                 .build();
     }
+	
+	public List<SaleResponseDTO> formatSaleData(Page<SaleResponseDTO> salePage) {
+        return salePage.getContent().stream().map(this::formatSale).collect(Collectors.toList());
+    }
+	
+	private SaleResponseDTO formatSale(SaleResponseDTO saleDTO) {
+        return saleDTO; // Puede agregar lógica adicional si se requiere
+    }
+	
 	
 	
 }

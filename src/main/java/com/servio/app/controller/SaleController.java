@@ -10,25 +10,26 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.servio.app.dto.ProductDTO;
-import com.servio.app.service.ProductService;
+import com.servio.app.dto.SaleRequestDTO;
+import com.servio.app.dto.SaleResponseDTO;
+import com.servio.app.service.SaleService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/servio/products")
+@RequestMapping("/api/v1/servio/sales")
 @RequiredArgsConstructor
-public class ProductController {
+public class SaleController {
 	
-	private final ProductService productService;
+	private final SaleService saleService;
 	
 	@GetMapping
-	public ResponseEntity<List<ProductDTO>> getAllProducts(){
-		return ResponseEntity.ok(productService.getAllProducts());
+	public ResponseEntity<List<SaleResponseDTO>> getAllSales(){
+		return ResponseEntity.ok(saleService.getAllSales());
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<Map<String, Object>> getAllProducts(
+	public ResponseEntity<Map<String, Object>> getAllSales(
             @RequestParam(value = "search_params", required = false, defaultValue = "") String searchParams,
             @RequestParam(value = "search_fields", required = false) String searchFields,
             @RequestParam(value = "sort", required = false) String sort,
@@ -38,21 +39,21 @@ public class ProductController {
         List<String> fields = searchFields != null ? List.of(searchFields.split(",")) : List.of();
         PageRequest pageRequest = createPageRequest(sort, page, pageSize);
 
-        Page<ProductDTO> productPage = productService.searchProducts(searchParams, fields, pageRequest);
+        Page<SaleResponseDTO> salePage = saleService.searchSales(searchParams, fields, pageRequest);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("products", productService.formatProductData(productPage)); 
-        response.put("current_page", productPage.getNumber()); 
-        response.put("total_pages", productPage.getTotalPages());
-        response.put("per_pages", productPage.getSize());
-        response.put("total_products", productPage.getTotalElements());
+        response.put("sales", saleService.formatSaleData(salePage)); 
+        response.put("current_page", salePage.getNumber()); 
+        response.put("total_pages", salePage.getTotalPages());
+        response.put("per_pages", salePage.getSize());
+        response.put("total_products", salePage.getTotalElements());
 
         return ResponseEntity.ok(response);
     }
 	
 	@PostMapping
-	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO dto) {
-        ProductDTO created = productService.createProduct(dto);
+	public ResponseEntity<SaleResponseDTO> createProduct(@RequestBody SaleRequestDTO dto) {
+        SaleResponseDTO created = saleService.createSale(dto);
         return ResponseEntity.ok(created);
     }
 	
