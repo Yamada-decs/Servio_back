@@ -56,6 +56,12 @@ public class Sale {
 	@Column(name = "state")
 	private SaleState saleState;
 	
+	@Column(name = "delivery_address")
+	private String deliveryAddress;
+	
+	@Column(name = "delivery_price")
+	private BigDecimal deliveryPrice;
+	
 	@OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleDetail> details = new ArrayList<>();
 

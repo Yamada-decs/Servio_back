@@ -19,5 +19,7 @@ public class SaleUpdateDTO {
 	 private BigDecimal discountAmount;
 	 private String discountType;
 	 private String discountReason;
+	 private String deliveryAddress;
+	 private BigDecimal deliveryPrice;
 	 private String comment;
 }

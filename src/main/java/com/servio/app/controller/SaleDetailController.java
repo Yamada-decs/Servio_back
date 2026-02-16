@@ -10,27 +10,25 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.servio.app.dto.SaleRequestDTO;
-import com.servio.app.dto.SaleResponseDTO;
-import com.servio.app.dto.SaleUpdateDTO;
-import com.servio.app.service.SaleService;
+import com.servio.app.dto.SaleDetailDTO;
+import com.servio.app.service.SaleDetailService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/servio/sales")
+@RequestMapping("/api/v1/servio/details")
 @RequiredArgsConstructor
-public class SaleController {
+public class SaleDetailController {
 	
-	private final SaleService saleService;
+	private final SaleDetailService saleDetailService;
 	
 	@GetMapping
-	public ResponseEntity<List<SaleResponseDTO>> getAllSales(){
-		return ResponseEntity.ok(saleService.getAllSales());
+	public ResponseEntity<List<SaleDetailDTO>> getAllDetails(){
+		return ResponseEntity.ok(saleDetailService.getAllDetails());
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<Map<String, Object>> getAllSales(
+	public ResponseEntity<Map<String, Object>> getAllDetails(
             @RequestParam(value = "search_params", required = false, defaultValue = "") String searchParams,
             @RequestParam(value = "search_fields", required = false) String searchFields,
             @RequestParam(value = "sort", required = false) String sort,
@@ -40,35 +38,29 @@ public class SaleController {
         List<String> fields = searchFields != null ? List.of(searchFields.split(",")) : List.of();
         PageRequest pageRequest = createPageRequest(sort, page, pageSize);
 
-        Page<SaleResponseDTO> salePage = saleService.searchSales(searchParams, fields, pageRequest);
+        Page<SaleDetailDTO> detailPage = saleDetailService.searchDetails(searchParams, fields, pageRequest);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("sales", saleService.formatSaleData(salePage)); 
-        response.put("current_page", salePage.getNumber()); 
-        response.put("total_pages", salePage.getTotalPages());
-        response.put("per_pages", salePage.getSize());
-        response.put("total_products", salePage.getTotalElements());
+        response.put("products", saleDetailService.formatDetailData(detailPage)); 
+        response.put("current_page", detailPage.getNumber()); 
+        response.put("total_pages", detailPage.getTotalPages());
+        response.put("per_pages", detailPage.getSize());
+        response.put("total_products", detailPage.getTotalElements());
 
         return ResponseEntity.ok(response);
     }
 	
 	@PostMapping
-	public ResponseEntity<SaleResponseDTO> createSale(@RequestBody SaleRequestDTO dto) {
-        SaleResponseDTO created = saleService.createSale(dto);
+	public ResponseEntity<SaleDetailDTO> createDetail(@RequestBody SaleDetailDTO dto) {
+		SaleDetailDTO created = saleDetailService.createDetail(dto);
         return ResponseEntity.ok(created);
     }
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<SaleResponseDTO> updateSale(@PathVariable Long id, @RequestBody SaleUpdateDTO dto) {
-        SaleResponseDTO created = saleService.updateSale(dto, id);
+	public ResponseEntity<SaleDetailDTO> updateDetail(@PathVariable Long id ,@RequestBody SaleDetailDTO dto) {
+		SaleDetailDTO created = saleDetailService.updateDetail(dto, id);
         return ResponseEntity.ok(created);
     }
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteSale(@PathVariable Long id){
-		saleService.deleteSale(id);
-		return ResponseEntity.noContent().build();
-	}
 	
 	private PageRequest createPageRequest(String sort, int page, int pageSize) {
         if (sort != null && sort.contains("%")) {
@@ -84,6 +76,5 @@ public class SaleController {
         }
         return PageRequest.of(page, pageSize, Sort.by(Sort.Order.desc("id")));
     }
-	
 	
 }

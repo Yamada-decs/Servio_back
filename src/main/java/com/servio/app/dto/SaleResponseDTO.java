@@ -25,6 +25,8 @@ public class SaleResponseDTO {
 	private BigDecimal finalPrice;
 	private BigDecimal remaining;
 	private String comment;
+	private String deliveryAddress;
+	private BigDecimal deliveryPrice;
 	private LocalDateTime date;
 	private String state;
 }

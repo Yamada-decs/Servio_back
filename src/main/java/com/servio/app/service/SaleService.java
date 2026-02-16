@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.servio.app.dto.SaleRequestDTO;
 import com.servio.app.dto.SaleResponseDTO;
@@ -52,6 +53,7 @@ public class SaleService {
     	sale.setDiscountAmount(BigDecimal.ZERO);
     	sale.setFinalPrice(BigDecimal.ZERO);
     	sale.setRemaining(BigDecimal.ZERO);
+    	sale.setDeliveryPrice(BigDecimal.ZERO);
     	sale.setComment(dto.getComment());
     	if (dto.getDate() != null) {
     	    sale.setDate(dto.getDate());
@@ -63,6 +65,7 @@ public class SaleService {
     	return mapToDTO(saved);
     }
 	
+	@Transactional
 	public SaleResponseDTO updateSale(SaleUpdateDTO dto, Long id) {
     	Sale sale = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Venta no encontrada"));;
 	    if (dto.getCustomerID() != null) {
@@ -76,18 +79,29 @@ public class SaleService {
 	    	sale.setDiscountType(DiscountType.valueOf(dto.getDiscountType()));
 	    	recalculateSale(sale);
 	    }
-    	sale.setComment(dto.getComment());
-    	Sale saved = saleRepository.save(sale);
-    	return mapToDTO(saved);
+	    if (dto.getDeliveryPrice() != null) {
+	        sale.setDeliveryPrice(dto.getDeliveryPrice());
+	        sale.setDeliveryAddress(dto.getDeliveryAddress());
+	    	recalculateSale(sale);
+	    }
+	    if (dto.getComment() != null) {
+	    	sale.setComment(dto.getComment());
+	    }
+    	//Sale saved = saleRepository.save(sale);
+    	return mapToDTO(sale);
     }
 	
+	public void deleteSale(Long id){
+		saleRepository.deleteById(id);
+	}
 	
-	private void recalculateSale(Sale sale) {
-	    
+	
+	public void recalculateSale(Sale sale) {
 	    
 	    BigDecimal total = sale.getDetails().stream()
 	            .map(detail -> detail.getSubTotal())
 	            .reduce(BigDecimal.ZERO, BigDecimal::add);
+	    total = total.add(sale.getDeliveryPrice());
 	    sale.setTotal(total);
 
 
@@ -144,6 +158,8 @@ public class SaleService {
                 .customerName(sale.getCustomer() != null 
                         ? sale.getCustomer().getName() 
                                 : null)
+                .deliveryAddress(sale.getDeliveryAddress())
+                .deliveryPrice(sale.getDeliveryPrice())
                 .total(sale.getTotal())
                 .discountReason(sale.getDiscountReason())
                 .dicountType(sale.getDiscountType() != null 
