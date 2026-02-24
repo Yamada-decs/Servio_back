@@ -18,6 +18,7 @@ public class SaleDetailDTO {
 	private Long saleId;
 	private Long productId;
 	private String productName;
+	private BigDecimal unitPrice;
 	private BigDecimal quantity;
 	private BigDecimal subTotal;
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.servio.app.model.Payment;
@@ -59,5 +60,16 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpec
         return findAll(spec, pageable); 
         
     }
+	
+	@Query("""
+		    SELECT p.method, SUM(p.amount)
+		    FROM Payment p
+		    WHERE p.sale.saleDate BETWEEN :start AND :end
+		    GROUP BY p.method
+		""")
+		List<Object[]> sumByMethodBetween(
+		        @Param("start") LocalDateTime start,
+		        @Param("end") LocalDateTime end
+		);
 	
 }

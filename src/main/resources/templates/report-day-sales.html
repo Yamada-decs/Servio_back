@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        body {
+            background: #eee; /* opcional, solo para diferenciar */
+            font-family: Arial, sans-serif; 
+            font-size: 12px;
+        }
+
+        .container {
+            width: 210mm;      /* ancho real A4 */
+            min-height: 297mm; /* alto real A4 */
+            margin: 20px auto;
+            background: white;
+            padding: 20mm;
+        }
+        h2 { 
+            text-align: center; 
+            margin-bottom: 20px;
+        }
+
+        .info-table {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .info-table td {
+            vertical-align: middle;   /* 👈 ahora todo se centra verticalmente */
+        }
+
+        .data-table {
+            width: 100%;
+        }
+
+        .data-table td {
+            padding: 4px 0;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .amount {
+            text-align: right;
+            padding-left: 20px;
+        }
+
+        /* 🔥 LOGO CENTRADO */
+        .logo {
+            text-align: center;       /* centro horizontal */
+            vertical-align: middle;   /* centro vertical */
+        }
+
+        .logo img {
+            width: 300px;  /* 👈 más grande */
+            height: auto;
+        }
+
+        table.report { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        table.report th, 
+        table.report td { 
+            border: 1px solid black; 
+            padding: 6px; 
+            text-align: center; 
+        }
+
+        table.report th { 
+            background-color: #f2f2f2; 
+        }
+
+        .sale-block {
+            margin-bottom: 20px;
+            page-break-inside: avoid; /* evita cortar una venta en dos páginas */
+        }
+
+        .sale-main {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+
+        .sale-main th,
+        .sale-main td {
+            border: 1px solid black;
+            padding: 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .sale-main th {
+            background-color: #f2f2f2;
+        }
+
+        .sale-main .cliente {
+            width: 30%; /* 👈 más espacio al cliente */
+            text-align: left;
+        }
+
+        .sub-section {
+            width: 85%;              /* mismo ancho que la tabla */
+            margin-left: auto;       /* 👈 la empuja a la derecha */
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .sub-section-title {
+            font-weight: bold;
+            margin-bottom: 3px;
+            text-align: left;        /* mantiene el texto alineado normal */
+            margin-left: 40px;  /* 👈 esto es el "TAB" */
+        }
+
+        .sub-table {
+            width: 100%;             /* ahora ocupa todo el ancho del sub-section */
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .sub-table td {
+            padding: 3px 0;
+            font-size: 11px;
+        }
+
+        .sub-table td.amount {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h2>REPORTE DE VENTAS</h2>
+
+<table class="info-table">
+    <tr>
+        <!-- Columna izquierda -->
+        <td width="25%">
+            <table class="data-table">
+                <tr>
+                    <td class="label">Fecha:</td>
+                    <td class="amount"></td>
+                </tr>
+                <tr>
+                    <td class="label">Total Efectivo:</td>
+                    <td class="amount">S/ 1500.00</td>
+                </tr>
+                <tr>
+                    <td class="label">Total Depositado:</td>
+                    <td class="amount">S/ 2300.00</td>
+                </tr>
+            </table>
+        </td>
+
+        <!-- Columna centro -->
+        <td width="25%">
+            <table class="data-table">
+                <tr>
+                    <td class="label"></td>
+                    <td class="amount">15/02/2026</td>
+                </tr>
+                <tr>
+                    <td class="label">Total Deudas:</td>
+                    <td class="amount">S/ 500.00</td>
+                </tr>
+                <tr>
+                    <td class="label">Total Ventas:</td>
+                    <td class="amount">S/ 4300.00</td>
+                </tr>
+            </table>
+        </td>
+
+        <!-- Columna derecha SOLO LOGO -->
+        <td width="50%" class="logo">
+            <img src="https://imagenes.elpais.com/resizer/v2/Y3W6QUFBBZLLTALRW6NBRPZ2RA.jpg?auth=d68f18251117888479d8fdc3210796bc86d9d3f41719da72c2877bcafc3504ea&width=1960&height=1103&smart=true" alt="Logo Empresa">
+        </td>
+    </tr>
+</table>
+
+<div th:each="sale : ${sales}" class="sale-block">
+
+    <!-- TABLA PRINCIPAL DE LA VENTA -->
+    <table class="sale-main">
+        <tr>
+            <th>Código</th>
+            <th class="cliente">Cliente</th>
+            <th>Total</th>
+            <th>Descuento</th>
+            <th>Precio Final</th>
+            <th>Remaining</th>
+            <th>Estado</th>
+        </tr>
+        <tr>
+            <td th:text="${sale.id}">VT-00001</td>
+            <td class="cliente" th:text="${sale.clientName}">MARIA FERNANDEZ</td>
+            <td th:text="${sale.total}">32.00</td>
+            <td th:text="${sale.discount}">0.00</td>
+            <td th:text="${sale.finalPrice}">32.00</td>
+            <td th:text="${sale.remaining}">0.00</td>
+            <td th:text="${sale.state}">PAGADO</td>
+        </tr>
+    </table>
+
+    <!-- DETALLES -->
+     <div class="sub-section-title">
+        DETALLES ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    </div>
+    <div class="sub-section">
+
+        <table class="sub-table">
+            <tr th:each="detail : ${sale.details}">
+                <td th:text="${detail.productName}">Adobo Arequipeño</td>
+                <td class="amount" th:text="${detail.unitPrice}">15.00 X Uni</td>
+                <td class="amount" th:text="${detail.quantity}">2.00</td>
+                <td class="amount" th:text="${detail.subtotal}">30.00</td>
+            </tr>
+            <tr th:each="detail : ${sale.details}">
+                <td th:text="${detail.productName}">Tapper</td>
+                <td class="amount" th:text="${detail.unitPrice}">1.00 X Uni</td>
+                <td class="amount" th:text="${detail.quantity}">2.00</td>
+                <td class="amount" th:text="${detail.subtotal}">2.00</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- PAGOS -->
+     <div class="sub-section-title">
+        PAGOS ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    </div>
+    <div class="sub-section">
+
+        <table class="sub-table">
+            <tr th:each="payment : ${sale.payments}">
+                <td th:text="${payment.method}">YAPE</td>
+                <td class="amount" th:text="${payment.amount}">16.00</td>
+            </tr>
+            <tr th:each="payment : ${sale.payments}">
+                <td th:text="${payment.method}">EFECTIVO</td>
+                <td class="amount" th:text="${payment.amount}">16.00</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+</div>
+</body>
+</html>
