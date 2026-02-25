@@ -11,6 +11,7 @@ import com.servio.app.dto.ReportSalesDTO;
 import com.servio.app.dto.SaleReportDTO;
 import com.servio.app.dto.SaleDetailDTO;
 import com.servio.app.dto.PaymentDTO;
+import com.servio.app.model.PaymentMethod;
 import com.servio.app.model.Sale;
 import com.servio.app.repository.PaymentRepository;
 import com.servio.app.repository.SaleRepository;
@@ -29,7 +30,7 @@ public class ReportService {
         // 1️⃣ Traer ventas del día
 		LocalDateTime start = date.atStartOfDay();
 		LocalDateTime end = date.atTime(23, 59, 59);
-        List<Sale> sales = saleRepository.findBySaleDateBetween(start, end);
+        List<Sale> sales = saleRepository.findByDateBetween(start, end);
 
         // 2️⃣ Mapear ventas a DTO
         List<SaleReportDTO> salesDTO = sales.stream()
@@ -50,13 +51,13 @@ public class ReportService {
 
         for (Object[] row : results) {
 
-            String method = (String) row[0];
+        	PaymentMethod method = (PaymentMethod) row[0];
             BigDecimal amount = (BigDecimal) row[1];
 
             switch (method) {
-                case "EFECTIVO" -> totalEfectivo = amount;
-                case "YAPE" -> totalYape = amount;
-                //case "TRANSFERENCIA" -> totalTransferencia = amount;
+                case EFECTIVO -> totalEfectivo = amount;
+                case YAPE -> totalYape = amount;
+                //case TRANSFERENCIA -> totalTransferencia = amount;
             }
         }
 

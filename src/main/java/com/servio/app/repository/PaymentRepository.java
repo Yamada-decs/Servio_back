@@ -62,10 +62,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, JpaSpec
     }
 	
 	@Query("""
-		    SELECT p.method, SUM(p.amount)
+		    SELECT p.paymentMethod, SUM(p.amount)
 		    FROM Payment p
-		    WHERE p.sale.saleDate BETWEEN :start AND :end
-		    GROUP BY p.method
+		    WHERE p.sale.date BETWEEN :start AND :end
+		    GROUP BY p.paymentMethod
 		""")
 		List<Object[]> sumByMethodBetween(
 		        @Param("start") LocalDateTime start,

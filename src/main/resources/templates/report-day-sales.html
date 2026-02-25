@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <style>
-        @page {
-            size: A4;
-            margin: 20mm;
-        }
-
-        body {
-            background: #eee; /* opcional, solo para diferenciar */
-            font-family: Arial, sans-serif; 
-            font-size: 12px;
-        }
-
-        .container {
-            width: 210mm;      /* ancho real A4 */
-            min-height: 297mm; /* alto real A4 */
-            margin: 20px auto;
-            background: white;
-            padding: 20mm;
-        }
-        h2 { 
-            text-align: center; 
-            margin-bottom: 20px;
-        }
-
+       
+		body {
+		    font-family: Arial, sans-serif;
+		    font-size: 12px;
+		    margin: 0;
+		}
+		h2 {
+		    text-align: center;
+		    margin-bottom: 20px;
+		}
+		table {
+		    width: 100%;
+		    border-collapse: collapse;
+		}
+		.sale-block {
+		    margin-bottom: 20px;
+		    page-break-inside: avoid;
+		}
         .info-table {
             width: 100%;
             margin-bottom: 25px;
@@ -138,7 +133,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div>
 
 <h2>REPORTE DE VENTAS</h2>
 
@@ -153,11 +148,11 @@
                 </tr>
                 <tr>
                     <td class="label">Total Efectivo:</td>
-                    <td class="amount">S/ 1500.00</td>
+                    <td class="amount" th:text="${'S/ ' + report.totalEfectivo}"></td>
                 </tr>
                 <tr>
-                    <td class="label">Total Depositado:</td>
-                    <td class="amount">S/ 2300.00</td>
+                    <td class="label">Total Yape:</td>
+                    <td class="amount" th:text="${'S/ ' + report.totalYape}"></td>
                 </tr>
             </table>
         </td>
@@ -167,27 +162,27 @@
             <table class="data-table">
                 <tr>
                     <td class="label"></td>
-                    <td class="amount">15/02/2026</td>
+                    <td class="amount" th:text="${#temporals.format(report.date,'dd/MM/yyyy')}"></td>
                 </tr>
                 <tr>
                     <td class="label">Total Deudas:</td>
-                    <td class="amount">S/ 500.00</td>
+                    <td class="amount">S/ 0.00</td>
                 </tr>
                 <tr>
                     <td class="label">Total Ventas:</td>
-                    <td class="amount">S/ 4300.00</td>
+                    <td class="amount" th:text="${'S/ ' + report.totalGeneral}"></td>
                 </tr>
             </table>
         </td>
 
         <!-- Columna derecha SOLO LOGO -->
         <td width="50%" class="logo">
-            <img src="https://imagenes.elpais.com/resizer/v2/Y3W6QUFBBZLLTALRW6NBRPZ2RA.jpg?auth=d68f18251117888479d8fdc3210796bc86d9d3f41719da72c2877bcafc3504ea&width=1960&height=1103&smart=true" alt="Logo Empresa">
+            <img src="https://imagenes.elpais.com/resizer/v2/Y3W6QUFBBZLLTALRW6NBRPZ2RA.jpg?auth=d68f18251117888479d8fdc3210796bc86d9d3f41719da72c2877bcafc3504ea;width=1960;height=1103;smart=true" alt="Logo Empresa"></img>
         </td>
     </tr>
 </table>
 
-<div th:each="sale : ${sales}" class="sale-block">
+<div th:each="sale : ${report.sales}" class="sale-block">
 
     <!-- TABLA PRINCIPAL DE LA VENTA -->
     <table class="sale-main">
@@ -201,52 +196,42 @@
             <th>Estado</th>
         </tr>
         <tr>
-            <td th:text="${sale.id}">VT-00001</td>
-            <td class="cliente" th:text="${sale.clientName}">MARIA FERNANDEZ</td>
-            <td th:text="${sale.total}">32.00</td>
-            <td th:text="${sale.discount}">0.00</td>
-            <td th:text="${sale.finalPrice}">32.00</td>
-            <td th:text="${sale.remaining}">0.00</td>
-            <td th:text="${sale.state}">PAGADO</td>
+            <td th:text="${sale.id}"></td>
+            <td class="cliente" th:text="${sale.customerName != null ? sale.customerName : sale.comment}"></td>
+            <td th:text="${'S/ ' + sale.total}"></td>
+			<td th:text="${'S/ ' + sale.discountAmount}"></td>
+			<td th:text="${'S/ ' + sale.finalPrice}"></td>
+			<td th:text="${'S/ ' + sale.remaining}"></td>
+			<td th:text="${sale.state}"></td>
         </tr>
     </table>
 
     <!-- DETALLES -->
-     <div class="sub-section-title">
-        DETALLES ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    </div>
+    <div style="font-weight:bold; border-bottom:1px solid black; margin-top:10px;">
+	    DETALLES
+	</div>
     <div class="sub-section">
 
         <table class="sub-table">
             <tr th:each="detail : ${sale.details}">
-                <td th:text="${detail.productName}">Adobo Arequipeño</td>
-                <td class="amount" th:text="${detail.unitPrice}">15.00 X Uni</td>
-                <td class="amount" th:text="${detail.quantity}">2.00</td>
-                <td class="amount" th:text="${detail.subtotal}">30.00</td>
-            </tr>
-            <tr th:each="detail : ${sale.details}">
-                <td th:text="${detail.productName}">Tapper</td>
-                <td class="amount" th:text="${detail.unitPrice}">1.00 X Uni</td>
-                <td class="amount" th:text="${detail.quantity}">2.00</td>
-                <td class="amount" th:text="${detail.subtotal}">2.00</td>
+                <td th:text="${detail.productName}"></td>
+                <td class="amount" th:text="${'S/ ' + detail.unitPrice + ' X UNI'}"></td>
+                <td class="amount" th:text="${detail.quantity + ' UNI'}"></td>
+                <td class="amount" th:text="${'S/ ' + detail.subTotal}"></td>
             </tr>
         </table>
     </div>
 
-    <!-- PAGOS -->
-     <div class="sub-section-title">
-        PAGOS ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    </div>
+    <!-- PAGOS-->
+    <div style="font-weight:bold; border-bottom:1px solid black; margin-top:10px;">
+	    PAGOS
+	</div>
     <div class="sub-section">
 
         <table class="sub-table">
             <tr th:each="payment : ${sale.payments}">
-                <td th:text="${payment.method}">YAPE</td>
-                <td class="amount" th:text="${payment.amount}">16.00</td>
-            </tr>
-            <tr th:each="payment : ${sale.payments}">
-                <td th:text="${payment.method}">EFECTIVO</td>
-                <td class="amount" th:text="${payment.amount}">16.00</td>
+                <td th:text="${payment.paymentMethod}"></td>
+                <td class="amount" th:text="${'S/ ' + payment.amount}"></td>
             </tr>
         </table>
     </div>
