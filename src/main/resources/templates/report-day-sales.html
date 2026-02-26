@@ -130,6 +130,20 @@
         .sub-table td.amount {
             text-align: right;
         }
+        .estado {
+		    font-weight: bold;
+		    padding: 4px;
+		}
+		
+		.estado-deuda {
+		    background-color: #d9534f; /* rojo */
+		    color: white;
+		}
+		
+		.estado-parcial {
+		    background-color: #f0ad4e; /* amarillo */
+		    color: black;
+		}
     </style>
 </head>
 <body>
@@ -202,7 +216,14 @@
 			<td th:text="${'S/ ' + sale.discountAmount}"></td>
 			<td th:text="${'S/ ' + sale.finalPrice}"></td>
 			<td th:text="${'S/ ' + sale.remaining}"></td>
-			<td th:text="${sale.state}"></td>
+			<td 
+			    th:text="${sale.state}"
+			    class="estado"
+			    th:classappend="
+			        ${sale.state == 'DEUDA'} ? ' estado-deuda' :
+			        (${sale.state == 'PARCIAL'} ? ' estado-parcial' : '')
+			    ">
+			</td>
         </tr>
     </table>
 

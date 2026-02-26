@@ -30,7 +30,7 @@ public class ReportService {
         // 1️⃣ Traer ventas del día
 		LocalDateTime start = date.atStartOfDay();
 		LocalDateTime end = date.atTime(23, 59, 59);
-        List<Sale> sales = saleRepository.findByDateBetween(start, end);
+        List<Sale> sales = saleRepository.findByDateBetweenOrderByDateAsc(start, end);
 
         // 2️⃣ Mapear ventas a DTO
         List<SaleReportDTO> salesDTO = sales.stream()

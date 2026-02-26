@@ -18,7 +18,7 @@ import com.servio.app.model.SaleState;
 public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificationExecutor<Sale>{
 	
 	List<Sale> findBySaleState(SaleState saleState);
-	List<Sale> findByDateBetween(LocalDateTime start, LocalDateTime end);
+	List<Sale> findByDateBetweenOrderByDateAsc(LocalDateTime start, LocalDateTime end);
 	
 	default Page<Sale> searchByFields(String searchParams, List<String> searchFields, Pageable pageable) {
     	if (searchParams == null || searchParams.isBlank() || searchFields.isEmpty()) {
