@@ -62,6 +62,12 @@ public class SaleDetailController {
         return ResponseEntity.ok(created);
     }
 	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteDetail(@PathVariable Long id) {
+		saleDetailService.deleteDetail(id);
+		return ResponseEntity.noContent().build();
+	}
+	
 	private PageRequest createPageRequest(String sort, int page, int pageSize) {
         if (sort != null && sort.contains("%")) {
             String[] sortArray = sort.split("%");

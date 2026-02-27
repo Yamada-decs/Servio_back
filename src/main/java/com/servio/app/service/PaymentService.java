@@ -78,6 +78,15 @@ public class PaymentService {
     	return mapToDTO(payment);
     }
 	
+	@Transactional
+	public void deletePayment(Long id) {
+		Payment payment = paymentRepository.findById(id).orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+    	Sale sale = saleRepository.findById(payment.getSale().getId()).orElseThrow(() -> new RuntimeException("Venta no encontrado"));
+    	paymentRepository.deleteById(id);
+    	//Payment saved = paymentRepository.save(payment);
+    	saleService.recalculateSale(sale);
+    }
+	
 	private PaymentDTO mapToDTO(Payment payment){
         return PaymentDTO.builder()
                 .id(payment.getId())

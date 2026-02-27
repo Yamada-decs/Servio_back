@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.servio.app.dto.PaymentDTO;
+import com.servio.app.repository.PaymentRepository;
 import com.servio.app.service.PaymentService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentController {
 
 	private final PaymentService paymentService;
+
 	
 	@GetMapping
 	public ResponseEntity<List<PaymentDTO>> getAllPayments(){
@@ -61,6 +63,12 @@ public class PaymentController {
 		PaymentDTO created = paymentService.updatePayment(dto, id);
         return ResponseEntity.ok(created);
     }
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletePayment(@PathVariable Long id){
+		paymentService.deletePayment(id);
+		return ResponseEntity.noContent().build();
+	}
 	
 	private PageRequest createPageRequest(String sort, int page, int pageSize) {
         if (sort != null && sort.contains("%")) {

@@ -69,6 +69,15 @@ public class SaleDetailService {
     	return mapToDTO(detail);
     }
 	
+	@Transactional
+	public void deleteDetail(Long id) {
+    	SaleDetail detail = saleDetailRepository.findById(id).orElseThrow(() -> new RuntimeException("Detalle no encontrado"));
+    	Sale sale = saleRepository.findById(detail.getSale().getId()).orElseThrow(() -> new RuntimeException("Venta no encontrado"));
+    	saleDetailRepository.deleteById(id);
+    	//SaleDetail saved = saleDetailRepository.save(detail);
+    	saleService.recalculateSale(sale);
+    }
+	
 	private SaleDetailDTO mapToDTO(SaleDetail saleDetail){
         return SaleDetailDTO.builder()
                 .id(saleDetail.getId())

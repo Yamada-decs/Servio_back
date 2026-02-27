@@ -77,16 +77,17 @@ public class SaleService {
 	        sale.setDiscountAmount(dto.getDiscountAmount());
 	        sale.setDiscountReason(dto.getDiscountReason());
 	    	sale.setDiscountType(DiscountType.valueOf(dto.getDiscountType()));
-	    	recalculateSale(sale);
+	    	//recalculateSale(sale);
 	    }
 	    if (dto.getDeliveryPrice() != null) {
 	        sale.setDeliveryPrice(dto.getDeliveryPrice());
 	        sale.setDeliveryAddress(dto.getDeliveryAddress());
-	    	recalculateSale(sale);
+	    	//recalculateSale(sale);
 	    }
 	    if (dto.getComment() != null) {
 	    	sale.setComment(dto.getComment());
 	    }
+	    recalculateSale(sale);
     	//Sale saved = saleRepository.save(sale);
     	return mapToDTO(sale);
     }
