@@ -213,7 +213,11 @@
             <td th:text="${sale.id}"></td>
             <td class="cliente" th:text="${sale.customerName != null ? sale.customerName : sale.comment}"></td>
             <td th:text="${'S/ ' + sale.total}"></td>
-			<td th:text="${'S/ ' + sale.discountAmount}"></td>
+			<td th:text="${
+			    sale.dicountType == 'PORCENTAJE' 
+			        ? '% ' + sale.discountAmount 
+			        : 'S/ ' + sale.discountAmount
+			}"></td>
 			<td th:text="${'S/ ' + sale.finalPrice}"></td>
 			<td th:text="${'S/ ' + sale.remaining}"></td>
 			<td 
@@ -240,6 +244,12 @@
                 <td class="amount" th:text="${detail.quantity + ' UNI'}"></td>
                 <td class="amount" th:text="${'S/ ' + detail.subTotal}"></td>
             </tr>
+            <tr th:if="${sale.deliveryAddress != null}">
+			    <td th:text="${'Delivery ' + sale.deliveryAddress}"></td>
+			    <td class="amount"></td>
+			    <td class="amount">1 SERV</td>
+			    <td class="amount" th:text="${'S/ ' + sale.deliveryPrice}"></td>
+			</tr>
         </table>
     </div>
 
